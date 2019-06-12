@@ -1,0 +1,4 @@
+token: my_telegram_bot_token
+
+watchlist:
+  max_items: 8
