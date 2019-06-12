@@ -1,0 +1,9 @@
+.vscode
+.idea
+
+env
+__pycache__
+data
+config.yml
+
+dummy
