@@ -1,8 +1,8 @@
 from telegram.ext import CallbackContext
 from telegram import Update
 
-from LimitedList import LimitedList
-from Utils import parse_command, config, Section
+from src.LimitedList import LimitedList
+from src.Utils import parse_command, config, Section
 
 
 def get_watchlist(context: CallbackContext) -> LimitedList:

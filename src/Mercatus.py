@@ -2,10 +2,10 @@ from asyncio import sleep
 from datetime import datetime, timedelta
 from telegram.ext import Updater, CommandHandler
 
-from Background import interval
-from Market import Market
-from Utils import persistence, config, Section
-from Commands import watchlist_add, watchlist_delete, watchlist_all, watchlist_clear, set_api_key, get_api_key
+from src.Background import interval
+from src.Market import Market
+from src.Utils import persistence, config, Section
+from src.Commands import watchlist_add, watchlist_delete, watchlist_all, watchlist_clear, set_api_key, get_api_key
 
 updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
 
