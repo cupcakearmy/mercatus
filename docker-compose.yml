@@ -6,6 +6,5 @@ services:
     restart: unless-stopped
     command: ["python", "-u", "/app/Mercatus.py"]
     volumes:
-      - ./src:/app/
       - ./data:/app/data
-      - ./config.yml:/app/config.yml
+      - ./config.yml:/app/config.yml:ro
