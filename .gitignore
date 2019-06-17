@@ -1,9 +1,9 @@
 .vscode
 .idea
 
+data.db
 env
 __pycache__
-data
 config.yml
 
 dummy
