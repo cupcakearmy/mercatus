@@ -2,10 +2,10 @@ from asyncio import sleep
 from datetime import datetime, timedelta
 from telegram.ext import Updater, CommandHandler
 
-from src.Background import interval
-from src.Market import Market
-from src.Utils import persistence, config, Section
-from src.Commands import watchlist_add, watchlist_delete, watchlist_all, watchlist_clear, set_api_key, get_api_key
+from Background import interval
+from Market import Market
+from Utils import persistence, config, Section
+from Commands import watchlist_add, watchlist_delete, watchlist_all, watchlist_clear, set_api_key, get_api_key
 
 updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
 
@@ -18,6 +18,7 @@ async def send_updates():
         if Section.API_Key.value not in data:
             continue
 
+        print('Sending updates to {}'.format(key))
         market = Market(data[Section.API_Key.value])
         updater.bot.send_message(key, text='Getting updates 🌎')
         first = True
