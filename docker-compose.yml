@@ -1,0 +1,11 @@
+version: '3.6'
+
+services:
+  bot:
+    image: cupcakearmy/mercatus
+    restart: unless-stopped
+    command: ["python", "-u", "/app/Mercatus.py"]
+    volumes:
+      - ./src:/app/
+      - ./data:/app/data
+      - ./config.yml:/app/config.yml
