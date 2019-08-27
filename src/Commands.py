@@ -69,21 +69,22 @@ Enjoy 🚀
 
 async def send_update_to_user(user: str, delta: datetime):
     try:
-        data = persistence.get_user_data()[user]
-        running = data.setdefault(Section.Running.value, False)
-        if Section.API_Key.value not in data:
+        user_data = persistence.get_user_data()[user]
+        running = user_data.setdefault(Section.Running.value, False)
+        if Section.API_Key.value not in user_data:
+            updater.bot.send_message(user, text='API Key not set ⛔️')
             return
 
         if running:
             updater.bot.send_message(user, text='Already running 🏃')
             return
 
-        data[Section.Running.value] = True
+        user_data[Section.Running.value] = True
         print('Sending updates to {}'.format(user))
-        market = Market(data[Section.API_Key.value])
+        market = Market(user_data[Section.API_Key.value])
         updater.bot.send_message(user, text='Getting updates 🌎')
         first = True
-        for item in data.get(Section.Watchlist.value, []):
+        for item in user_data.get(Section.Watchlist.value, []):
             if first:
                 first = False
             else:
@@ -97,11 +98,10 @@ async def send_update_to_user(user: str, delta: datetime):
             updater.bot.send_message(user, text='*{}*'.format(item), parse_mode=ParseMode.MARKDOWN)
             updater.bot.send_photo(user, photo=chart)
 
-    except Exception as e:
-        print(e)
+    except:
         updater.bot.send_message(user, text='There was an error ⚠️')
     finally:
-        data[Section.Running.value] = False
+        user_data[Section.Running.value] = False
 
 
 @interval(every=3 * 60 * 60.0, autorun=False, isolated=True)
