@@ -2,9 +2,23 @@ from telegram import Update
 from telegram.ext import PicklePersistence, Updater
 from yaml import load, Loader
 from enum import Enum
+import pickle
 
-config = load(open('./config.yml', 'r'), Loader=Loader)
-persistence = PicklePersistence('./data.db')
+DB_FILE = './data.db'
+CONFIG_FILE = './config.yml'
+DEFAULT_DATA = {
+    'user_data': {},
+    'chat_data': {},
+    'conversations': {},
+}
+
+try:
+    pickle.load(open(DB_FILE, 'rb'))
+except:
+    pickle.dump(DEFAULT_DATA, open(DB_FILE, 'wb'))
+
+config = load(open(CONFIG_FILE, 'r'), Loader=Loader)
+persistence = PicklePersistence(DB_FILE)
 updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
 
 
