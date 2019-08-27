@@ -23,6 +23,7 @@ class Market:
             data = data.reset_index()
             data['date'] = data['date'].astype('datetime64[ns]')
             data = data.loc[since < data['date']]
+            data = data.loc[data[y] > 0.0].dropna()  # Remove zero values
             data.plot(x=x, y=y, ax=ax, label=label)
 
         df: pd.DataFrame = self.ts.get_daily(symbol=stock, outputsize='full')[0]
@@ -33,7 +34,6 @@ class Market:
             sort_data_and_plot(data=df, x='date', y='WMA', label=str(period))
 
         plt.plot()
-        # plt.show()
         buffer = io.BytesIO()
         fig.savefig(buffer, format='png')
         buffer.seek(0)
