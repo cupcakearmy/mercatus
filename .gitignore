@@ -2,7 +2,7 @@
 .idea
 
 data.db
-env
+venv
 __pycache__
 config.yml
 
