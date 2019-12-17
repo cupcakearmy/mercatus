@@ -1,8 +1,8 @@
-FROM python:3.7-slim
+FROM python:3-slim
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt && rm -rf /root/.cache
+RUN pip install --no-cache-dir -r requirements.txt && rm -rf /root/.cache
 
 COPY src .
 CMD ["python", "-u", "/app/Mercatus.py"]
