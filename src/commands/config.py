@@ -3,18 +3,20 @@ from telegram.ext import CommandHandler, MessageHandler, Filters, ConversationHa
 
 from utils import Section
 
-MENU, API_KEY, FREQUENCY = range(3)
+MENU, API_KEY, FREQUENCY, ENABLED = range(4)
 
 
 def show_menu(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton('API Key', callback_data=API_KEY)],
+        [InlineKeyboardButton('Auto Updates', callback_data=ENABLED)],
         [InlineKeyboardButton('Frequency', callback_data=FREQUENCY)],
         [InlineKeyboardButton('Done', callback_data=ConversationHandler.END)],
     ]
     update.effective_user.send_message(
         '_Current settings:_\n'
         f'API Key: *{context.user_data[Section.API_Key.value]}*\n'
+        f'Auto Updates: *{context.user_data[Section.Enabled.value]}*\n'
         f'Frequency: *{context.user_data[Section.Frequency.value]}*\n'
         '\nWhat settings do you want to configure?',
         parse_mode=ParseMode.MARKDOWN,
@@ -73,6 +75,8 @@ def menu(update: Update, context: CallbackContext):
         return show_menu_api_key(update, context)
     elif selected == FREQUENCY:
         return show_menu_frequency(update, context)
+    elif selected == ENABLED:
+        toggle_enabled(update, context)
     else:
         return ConversationHandler.END
 
@@ -96,6 +100,14 @@ def set_frequency(update: Update, context: CallbackContext):
             chat_id=update.callback_query.message.chat_id,
             message_id=update.callback_query.message.message_id,
         )
+
+    return show_menu(update, context)
+
+
+def toggle_enabled(update: Update, context: CallbackContext):
+    new = not context.user_data.setdefault(Section.Enabled.value, True)
+    context.user_data[Section.Enabled.value] = new
+    update.effective_user.send_message('Auto updates enabled' if new else 'Auto updates disabled')
 
     return show_menu(update, context)
 

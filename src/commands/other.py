@@ -84,11 +84,14 @@ def send_updates(context: CallbackContext):
         now = current_timestamp()
 
         for user, user_data in persistence.user_data.items():
+            enabled = user_data.setdefault(Section.Enabled.value, True)
             last_run = user_data.setdefault(Section.LastRun.value, 0)
             frequency = parse(user_data.setdefault(Section.Frequency.value, '1d'))
 
-            if last_run + frequency < now:
+            if enabled and last_run + frequency < now:
                 delta = now - user_data.setdefault(Section.Interval.value, delta_timestamp(days=365))
                 send_update_to_user(user=user, delta=delta)
+    except Exception as e:
+        print(e)
     finally:
         SENDING = False
