@@ -10,17 +10,7 @@ CONFIG_FILE = './config.yml'
 
 config = load(open(CONFIG_FILE, 'r'), Loader=Loader)
 persistence = PicklePersistence(DB_FILE)
-# persistence.load_singlefile()
 updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
-
-
-class Section(Enum):
-    Watchlist = 'watchlist'
-    API_Key = 'api_key'
-    Running = 'running'
-    Interval = 'interval'  # Time axis of the graph
-    Frequency = 'frequency'  # How ofter updates should be sent
-    LastRun = 'last_run'
 
 
 def current_timestamp():
@@ -32,11 +22,8 @@ def delta_timestamp(**kwargs):
 
 
 def parse_command(update: Update) -> (str, str):
+    """
+    Splits the command from the rest of the message and returns the tuple
+    """
     key, value = (update.message.text.split(' ', 1)[1].split(' ', 1) + [None])[:2]
     return key, value
-
-
-def parse_callback(update: Update) -> str:
-    selected = update.callback_query.data
-    cleaned = ''.join(selected.split(':')[1:])  # Remove the pattern from the start
-    return cleaned

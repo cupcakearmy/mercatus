@@ -11,10 +11,13 @@ class LimitedList:
         self.data = init if init else []
         self.limit = limit
 
+    def __len__(self):
+        return len(self.data)
+
     def _is_index(self, i: int) -> bool:
         return False if i < 0 or i > len(self.data) - 1 else True
 
-    def add(self, value: str):
+    def add(self, value: any):
         print(f'Before {self.data}')
         # Delete oldest element if there are too many
         if len(self.data) + 1 > self.limit:

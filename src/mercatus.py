@@ -1,10 +1,10 @@
 import matplotlib as mpl
 from telegram.ext import CommandHandler
 
-from utils import updater, persistence
+from utils import updater
 from commands.config import config_handler
-from commands.watchlist import watchlist_add, watchlist_delete, watchlist_all, watchlist_clear
-from commands.other import start, data, send_updates
+from commands.watchlist import watchlist_handler
+from commands.other import data, send_updates, start_handler, help_handler, stop_handler, error_handler
 
 
 def main():
@@ -14,16 +14,16 @@ def main():
     jq = updater.job_queue
 
     # Handlers
-    dp.add_handler(CommandHandler('add', watchlist_add))
-    dp.add_handler(CommandHandler('delete', watchlist_delete))
-    dp.add_handler(CommandHandler('list', watchlist_all))
-    dp.add_handler(CommandHandler('clear', watchlist_clear))
-    dp.add_handler(config_handler)
-    dp.add_handler(CommandHandler('start', start))
+    dp.add_error_handler(error_handler)
+    dp.add_handler(CommandHandler('start', start_handler))
+    dp.add_handler(CommandHandler('stop', stop_handler))
+    dp.add_handler(CommandHandler('help', help_handler))
     dp.add_handler(CommandHandler('data', data))
+    dp.add_handler(config_handler)
+    dp.add_handler(watchlist_handler)
 
     # Cron jobs
-    jq.run_repeating(send_updates, interval=30, first=0)
+    jq.run_repeating(send_updates, interval=30, first=5)
 
     # Start
     print('Started 🚀')
