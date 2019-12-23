@@ -148,7 +148,7 @@ def single(update, context):
 
 def show_single_frequency(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton('2 minutes', callback_data='2m'), InlineKeyboardButton(
+        [InlineKeyboardButton('5 minutes', callback_data='5m'), InlineKeyboardButton(
             '30 minutes', callback_data='30m')],
         [InlineKeyboardButton('hour', callback_data='1h'), InlineKeyboardButton(
             '4 hours', callback_data='4h')],
