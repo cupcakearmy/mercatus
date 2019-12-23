@@ -4,7 +4,7 @@ from telegram.ext import CallbackContext, ConversationHandler, CommandHandler, C
 from commands.other import send_update_to_user
 from constants import Section
 from limited_dict import LimitedDict
-from utils import config
+from utils import max_list_items
 
 ALL, SINGLE, EDIT, ADD, DELETE, BACK, ENABLED, FREQUENCY, INTERVAL, DATA = map(chr, range(10))
 END = str(ConversationHandler.END)
@@ -12,7 +12,7 @@ END = str(ConversationHandler.END)
 
 def get_watchlist(context: CallbackContext) -> LimitedDict:
     return LimitedDict(
-        config[Section.Watchlist.value]['max_items'],
+        max_list_items,
         context.user_data.setdefault(Section.Watchlist.value, {}),
     )
 

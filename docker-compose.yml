@@ -4,6 +4,8 @@ services:
   bot:
     image: cupcakearmy/mercatus
     restart: unless-stopped
+    environment:
+      - TOKEN=my_token
+      - MAX_LIST_SIZE=8
     volumes:
-      - ./data.db:/app/data.db
-      - ./config.yml:/app/config.yml:ro
+      - ./data:/app/data

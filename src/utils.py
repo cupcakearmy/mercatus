@@ -1,15 +1,27 @@
 from datetime import datetime, timedelta
+from os import environ, makedirs
+from os.path import exists, dirname
 
 from telegram import Update
 from telegram.ext import PicklePersistence, Updater
-from yaml import load, Loader
 
-DB_FILE = './data.db'
-CONFIG_FILE = './config.yml'
+DB_FILE = './data/db.pickle'
+DB_DIR = dirname(DB_FILE)
 
-config = load(open(CONFIG_FILE, 'r'), Loader=Loader)
+if not exists(DB_DIR):
+    makedirs(DB_DIR)
+
+try:
+    max_list_items = int(environ.get('MAX_LIST_SIZE'))
+except:
+    max_list_items = 8
+
+token = environ.get('TOKEN')
+if not token:
+    raise Exception('No Token found.')
+
 persistence = PicklePersistence(DB_FILE)
-updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
+updater: Updater = Updater(token, use_context=True, persistence=persistence)
 
 
 def update_updater_data():
