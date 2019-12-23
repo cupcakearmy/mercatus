@@ -1,9 +1,10 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler, CallbackContext
 
+from commands.other import stop_handler
 from constants import Section
 
-MENU, API_KEY, ENABLED, DELETE = range(4)
+MENU, API_KEY, ENABLED, DELETE = map(chr, range(4))
 
 
 def init(update: Update, context: CallbackContext):
@@ -25,7 +26,7 @@ def show_menu(update: Update, context: CallbackContext):
     ]
     update.effective_user.send_message(
         '_Current settings:_\n'
-        f'API Key: *{context.user_data.get(Section.API_Key.value, "No Api key set")}*\n'
+        f'API Key: *{context.user_data.get(Section.API_Key.value, "No API key set")}*\n'
         f'Global auto updates: *{context.user_data[Section.Enabled.value]}*\n'
         '\nWhat settings do you want to configure?',
         parse_mode=ParseMode.MARKDOWN,
@@ -36,7 +37,7 @@ def show_menu(update: Update, context: CallbackContext):
 
 
 def menu(update: Update, context: CallbackContext):
-    selected = int(update.callback_query.data)
+    selected = update.callback_query.data
 
     context.bot.delete_message(
         chat_id=update.callback_query.message.chat_id,
@@ -47,8 +48,38 @@ def menu(update: Update, context: CallbackContext):
         return show_api_key(update, context)
     elif selected == ENABLED:
         toggle_enabled(update, context)
+    elif selected == DELETE:
+        return show_delete(update, context)
     else:
         return ConversationHandler.END
+
+
+def show_delete(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton('Yes', callback_data='1')],
+        [InlineKeyboardButton('Back', callback_data='0')],
+    ]
+    update.effective_user.send_message(
+        '🗑 Are you sure? Cannot be undone!',
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+    return DELETE
+
+
+def delete(update: Update, context: CallbackContext):
+    selected = update.callback_query.data
+
+    context.bot.delete_message(
+        chat_id=update.callback_query.message.chat_id,
+        message_id=update.callback_query.message.message_id,
+    )
+
+    if selected == '1':
+        stop_handler(update, context)
+        return ConversationHandler.END
+    else:
+        return show_menu(update, context)
 
 
 def show_api_key(update: Update, context: CallbackContext):
@@ -85,8 +116,9 @@ config_handler = ConversationHandler(
         MENU: [CallbackQueryHandler(menu)],
         API_KEY: [
             CommandHandler('cancel', cancel),
-            MessageHandler(Filters.all, api_key),
+            MessageHandler(Filters.text, api_key),
         ],
+        DELETE: [CallbackQueryHandler(delete)]
     },
     fallbacks=[CommandHandler('cancel', cancel)]
 )

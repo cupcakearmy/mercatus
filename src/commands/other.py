@@ -28,7 +28,7 @@ def help_handler(update: Update, context: CallbackContext):
 
 def stop_handler(update: Update, context: CallbackContext):
     context.user_data.clear()
-    update.message.reply_text('You and your data were deleted 🗑')
+    update.effective_user.send_message('You and your data were deleted 🗑')
 
 
 @run_async
