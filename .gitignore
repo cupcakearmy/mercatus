@@ -1,9 +1,11 @@
+# Editors
 .vscode
 .idea
 
-data.db
+# Python
 venv
 __pycache__
-config.yml
 
-dummy
+# Runtime
+.dev.env
+data
