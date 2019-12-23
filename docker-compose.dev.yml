@@ -2,8 +2,7 @@ version: '3.7'
 
 services:
   bot:
-    image: cupcakearmy/mercatus
-    restart: unless-stopped
+    build: .
     volumes:
       - ./data.db:/app/data.db
       - ./config.yml:/app/config.yml:ro
