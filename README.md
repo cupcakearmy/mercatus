@@ -5,7 +5,7 @@ They offfer a free tier API Key, so this is completely free.
 
 ## 🚀 Quickstart
 
-Simply chat with the [bot](https://telegram.me/MercatusBot)
+Simply chat with the [@MercatusBot](https://telegram.me/MercatusBot)
 
 ## 🖥 Self-Hosting
 
