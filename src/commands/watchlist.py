@@ -132,7 +132,6 @@ def single(update, context):
     elif selected == BACK:
         return show_menu(update, context)
     elif selected == ENABLED:
-        print('Changing', wl[Section.Enabled.value])
         wl[current][Section.Enabled.value] = not wl[current][Section.Enabled.value]
         save_watchlist(context, wl)
         return show_single(update, context)

@@ -62,9 +62,10 @@ def send_update_to_user(user: str, auto, codes=None):
                 last_run = code_data[Section.LastRun.value]
                 frequency = parse(code_data[Section.Frequency.value])
                 interval = parse(code_data[Section.Interval.value])
+                enabled = code_data[Section.Enabled.value]
                 # print(code, last_run + frequency, now, last_run + frequency - now)
 
-                if auto and last_run + frequency > now:
+                if auto and (last_run + frequency > now or not enabled):
                     continue
 
                 code_data[Section.LastRun.value] = current_timestamp()
