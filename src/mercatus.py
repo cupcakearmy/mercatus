@@ -1,10 +1,11 @@
 import matplotlib as mpl
 from telegram.ext import CommandHandler
 
-from utils import updater
 from commands.config import config_handler
-from commands.watchlist import watchlist_handler
 from commands.other import data, send_updates, start_handler, help_handler, stop_handler, error_handler
+from commands.watchlist import watchlist_handler
+
+from utils import updater
 
 
 def main():

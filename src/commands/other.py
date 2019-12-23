@@ -2,14 +2,14 @@ from asyncio import sleep, run
 from datetime import datetime
 
 from pytimeparse import parse
-from telegram import Update, ParseMode, ReplyKeyboardRemove
-from telegram.ext import CallbackContext, ConversationHandler
+from telegram import Update
+from telegram.ext import CallbackContext
 from telegram.ext.dispatcher import run_async
 
-from commands.config import Section
+from constants import Section
 from market import Market
 from text import INTRO_TEXT
-from utils import persistence, updater, current_timestamp, delta_timestamp, update_updater_data
+from utils import persistence, updater, current_timestamp, update_updater_data
 
 SENDING = False
 

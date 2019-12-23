@@ -1,10 +1,10 @@
 from telegram import Update, InlineKeyboardButton, ParseMode, InlineKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CallbackContext, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 
-from commands.config import Section
 from commands.other import send_update_to_user
+from constants import Section
 from limited_dict import LimitedDict
-from utils import parse_command, config
+from utils import config
 
 ALL, SINGLE, EDIT, ADD, DELETE, BACK, ENABLED, FREQUENCY, INTERVAL, DATA = map(chr, range(10))
 END = str(ConversationHandler.END)

@@ -1,21 +1,17 @@
-from enum import Enum
-
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler, CallbackContext
 
-MENU, API_KEY, ENABLED = range(3)
+from constants import Section
+
+MENU, API_KEY, ENABLED, DELETE = range(4)
 
 
-class Section(Enum):
-    Watchlist = 'watchlist'  # The list of Stocks/ETF to watch
-    Code = 'code'  # Market code for a given stock, etf, etc.
-    API_Key = 'api_key'  # Alpha Vantage API Key
-    Running = 'running'  # Currently sending updates. Avoid overloading the API
-    Enabled = 'enabled'  # Whether the bot should send automatic updates
-    Interval = 'interval'  # Time axis of the graph
-    Frequency = 'frequency'  # How ofter updates should be sent
-    LastRun = 'last_run'  # Last time an update was sent to the user
-    CurrentToEdit = 'current_to_edit'  # Current element to edit in the conversation handler
+def init(update: Update, context: CallbackContext):
+    context.bot.delete_message(
+        chat_id=update.message.chat_id,
+        message_id=update.message.message_id,
+    )
+    return show_menu(update, context)
 
 
 def show_menu(update: Update, context: CallbackContext):
@@ -24,6 +20,7 @@ def show_menu(update: Update, context: CallbackContext):
         [InlineKeyboardButton(
             f'Turn {"off" if context.user_data.setdefault(Section.Enabled.value, True) else "on"} global auto updates',
             callback_data=ENABLED)],
+        [InlineKeyboardButton('Delete all data', callback_data=DELETE)],
         [InlineKeyboardButton('Done', callback_data=ConversationHandler.END)],
     ]
     update.effective_user.send_message(
@@ -38,23 +35,6 @@ def show_menu(update: Update, context: CallbackContext):
     return MENU
 
 
-def show_menu_api_key(update: Update, context: CallbackContext):
-    update.effective_user.send_message(
-        'Send me your API Key 🙂'
-        '\nor /cancel',
-        reply_markup=ReplyKeyboardRemove()
-    )
-    return API_KEY
-
-
-def init(update: Update, context: CallbackContext):
-    context.bot.delete_message(
-        chat_id=update.message.chat_id,
-        message_id=update.message.message_id,
-    )
-    return show_menu(update, context)
-
-
 def menu(update: Update, context: CallbackContext):
     selected = int(update.callback_query.data)
 
@@ -64,14 +44,23 @@ def menu(update: Update, context: CallbackContext):
     )
 
     if selected == API_KEY:
-        return show_menu_api_key(update, context)
+        return show_api_key(update, context)
     elif selected == ENABLED:
         toggle_enabled(update, context)
     else:
         return ConversationHandler.END
 
 
-def set_api_key(update, context):
+def show_api_key(update: Update, context: CallbackContext):
+    update.effective_user.send_message(
+        'Send me your API Key 🙂'
+        '\nor /cancel',
+        reply_markup=ReplyKeyboardRemove()
+    )
+    return API_KEY
+
+
+def api_key(update, context):
     reply = update.message.text
     context.user_data[Section.API_Key.value] = reply
     update.message.reply_text(f'Saved {reply} 💾', reply_markup=ReplyKeyboardRemove())
@@ -96,7 +85,7 @@ config_handler = ConversationHandler(
         MENU: [CallbackQueryHandler(menu)],
         API_KEY: [
             CommandHandler('cancel', cancel),
-            MessageHandler(Filters.all, set_api_key),
+            MessageHandler(Filters.all, api_key),
         ],
     },
     fallbacks=[CommandHandler('cancel', cancel)]

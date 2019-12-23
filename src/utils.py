@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from enum import Enum
 
-from yaml import load, Loader
 from telegram import Update
 from telegram.ext import PicklePersistence, Updater
+from yaml import load, Loader
 
 DB_FILE = './data.db'
 CONFIG_FILE = './config.yml'
