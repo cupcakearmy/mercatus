@@ -23,7 +23,7 @@ def main():
     dp.add_handler(watchlist_handler)
 
     # Cron jobs
-    jq.run_repeating(send_updates, interval=30, first=5)
+    jq.run_repeating(send_updates, interval=20, first=3)
 
     # Start
     print('Started 🚀')

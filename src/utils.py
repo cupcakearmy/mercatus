@@ -13,6 +13,12 @@ persistence = PicklePersistence(DB_FILE)
 updater: Updater = Updater(config['token'], use_context=True, persistence=persistence)
 
 
+def update_updater_data():
+    updater.dispatcher.user_data = persistence.user_data
+    updater.dispatcher.update_persistence()
+    persistence.flush()
+
+
 def current_timestamp():
     return int(datetime.now().timestamp())
 
