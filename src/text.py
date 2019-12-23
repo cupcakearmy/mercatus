@@ -1,15 +1,19 @@
 INTRO_TEXT = """
-*Welcome! 👋*
+*Hi human 👋*
+I'm here to send you the WMA (weighted moving average) for the stock you choose.
 
-*1.* First you will need to get a (free) api token for the stock data.
+*1.* First you will need to get a *free* api token for the stock data.
 [https://www.alphavantage.co/support/#api-key](Alphavantage Key 🔑)
 
-*2.* Then enter it by sending the code to me with `/setKey myApiCode`
+*2.* Then enter it in the /settings
 
-*3.* Add stocks or ETFs to your `/list` by going to [https://finance.yahoo.com/](Yahoo Finance 📈) and the sending it to `/add`
+*3.* Manage stocks or ETFs in your /list.
+For the codes you can check [https://finance.yahoo.com/](Yahoo Finance 📈)
 _Example_ For Apple `/add AAPL`
 
-*4.* Optionally choose how often you will get updates by calling the `/frequency` command.
+*4.* Customize!
+You can set the _frequency_ for each item in your /list, as well as the _time interval_ to show in the graph.
+Also you have the ability to toggle all the automatic updates in the /settings
 
 Enjoy 🚀
-""".lstrip()
+""".strip()
